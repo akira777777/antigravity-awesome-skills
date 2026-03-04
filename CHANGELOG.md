@@ -7,6 +7,363 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+---
+
+## [6.9.0] - 2026-03-03 - "Multi-Tool & Agent Infrastructure"
+
+> **Agent capabilities expand with email infrastructure, video intelligence, and multi-tool installer support.**
+
+This release delivers major infrastructure improvements: one-command install for multiple AI tools, email capabilities for agents via AgentMail, and video/audio processing with VideoDB. Plus significant web-app performance optimizations.
+
+### 🚀 New Skills
+
+### 📧 AgentMail
+
+**Email infrastructure for AI agents.**
+
+Gives agents real email addresses (`@theagentmail.net`) via REST API. Create accounts, send/receive emails, manage webhooks, and check karma balance. Perfect for agents that need to sign up for services, receive verification codes, or communicate via email.
+
+- Create email accounts with karma-based rate limiting
+- Send/receive emails with attachments
+- Webhook signature verification for secure notifications
+- Full SDK examples and API reference
+
+> **Try it:** "Create an email account for my agent and send a verification email"
+
+### 📹 VideoDB
+
+**Video and audio perception, indexing, and editing.**
+
+Ingest files/URLs/live streams, build visual/spoken indexes, search with timestamps, edit timelines, add overlays/subtitles, generate media, and create real-time alerts.
+
+- Ingest from files, URLs, RTSP/live feeds, or desktop capture
+- Semantic, visual, and spoken word indexes with timestamp search
+- Timeline editing with subtitles, overlays, transcoding
+- AI generation for images, video, music, voiceovers
+
+> **Try it:** "Search for 'product demo' in this video and create a clip with subtitles"
+
+---
+
+### 📦 Improvements
+
+- **Multi-Tool Install Support**: The installer now supports installing skills for multiple tools simultaneously (e.g., `npx antigravity-awesome-skills --claude --codex`). Fixes #182.
+- **Web-App Sync Optimization**: Hybrid sync strategy using git fetch for faster updates (5+ min → < 2 sec when no changes). Includes sort by "Most Stars" feature.
+- **Registry Update**: Now tracking 970 skills (+2 new).
+
+### 👥 Credits
+
+- **@zinzied** for web-app sync optimization (PR #180)
+- **@0xrohitgarg** for VideoDB skill contribution (PR #181)
+- **@uriva** for AgentMail skill contribution (PR #183)
+
+---
+
+## [6.8.0] - 2026-03-02 - "Productivity Boost & In-App Sync"
+
+> **Major productivity enhancements to existing skills and new in-app skill synchronization feature.**
+
+This release delivers version 2.0.0 upgrades to two critical skills: `vibe-code-auditor` and `tutorial-engineer`, packed with pattern recognition shortcuts, deterministic scoring, and copy-paste templates. Plus, a new "Sync Skills" button in the Web App enables live skill updates from GitHub without leaving the browser.
+
+## 🚀 New Features
+
+### 🔄 In-App Sync Skills Button
+
+**One-click skill synchronization from the Web App UI.**
+Replaces the unreliable START_APP.bat auto-updater. Users can now click "Sync Skills" in the web app to download the latest skills from GitHub instantly.
+
+- Vite dev server plugin exposing `/api/refresh-skills` endpoint
+- Downloads and extracts only the `/skills/` folder and `skills_index.json`
+- Live UI updates without page refresh
+
+## 📦 Improvements
+
+### ✨ vibe-code-auditor v2.0.0
+
+**Productivity-focused overhaul with 10x faster audits.**
+
+- **Pattern Recognition Shortcuts**: 10 heuristics for rapid issue detection
+- **Quick Checks**: 3-second scans for each of 7 audit dimensions
+- **Executive Summary**: Critical findings upfront
+- **Deterministic Scoring**: Replaces subjective ranges with algorithmic scoring
+- **Code Fix Blocks**: Before/after examples for copy-paste remediation
+- **Quick Wins Section**: Fixes completable in <1 hour
+- **Calibration Rules**: Scoring adjusted by code size (snippet vs multi-file)
+- **Expanded Security**: SQL injection, path traversal, insecure deserialization detection
+
+### 📚 tutorial-engineer v2.0.0
+
+**Evidence-based learning with 75% better retention.**
+
+- **4-MAT Model**: Why/What/How/What If framework for explanations
+- **Learning Retention Shortcuts**: Evidence-based patterns (+75% retention)
+- **Cognitive Load Management**: 7±2 rule, One Screen, No Forward References
+- **Exercise Calibration**: Difficulty table with time estimates
+- **Format Selection Guide**: Quick Start vs Deep Dive vs Workshop
+- **Pre-Publish Audit Checklist**: Comprehension, progression, technical validation
+- **Speed Scoring Rubric**: 1-5 rating on 5 dimensions
+- **Copy-Paste Template**: Ready-to-use Markdown structure
+- **Accessibility Checklist**: WCAG compliance for tutorials
+
+## 👥 Credits
+
+A huge shoutout to our community contributors:
+
+- **@munir-abbasi** for the v2.0.0 productivity enhancements to `vibe-code-auditor` and `tutorial-engineer` (PR #172)
+- **@zinzied** for the In-App Sync Skills Button and START_APP.bat simplification (PR #178)
+
+---
+
+## [6.7.0] - 2026-03-01 - "Intelligence Extraction & Automation"
+
+> **New skills for Web Scraping (Apify), X/Twitter extraction, Genomic analysis, and hardened registry infrastructure.**
+
+This release integrates 14 new specialized agent-skills. Highlights include the official Apify collection for web scraping and data extraction, a high-performance X/Twitter scraper, and a comprehensive genomic analysis toolkit. The registry infrastructure has been hardened with hermetic testing and secure YAML parsing.
+
+## 🚀 New Skills
+
+### 🕷️ [apify-agent-skills](skills/apify-actorization/)
+
+**12 Official Apify skills for web scraping and automation.**
+Scale data extraction using Apify Actors. Includes specialized skills for e-commerce, lead generation, social media analysis, and market research.
+
+### 🐦 [x-twitter-scraper](skills/x-twitter-scraper/)
+
+**High-performance X (Twitter) data extraction.**
+Search tweets, fetch profiles, and extract media/engagement metrics without complex API setups.
+
+### 🧬 [dna-claude-analysis](skills/dna-claude-analysis/)
+
+**Personal genome analysis toolkit.**
+Analyze raw DNA data across 17 categories (health, ancestry, pharmacogenomics) with interactive HTML visualization.
+
+---
+
+## 📦 Improvements
+
+- **Registry Hardening**: Migrated all registry maintenance scripts to `PyYAML` for safe, lossless metadata handling. (PR #168)
+- **Hermetic Testing**: Implemented environment-agnostic registry tests to prevent CI drift.
+- **Contributor Sync**: Fully synchronized the Repo Contributors list in README.md from git history (69 total contributors).
+- **Documentation**: Standardized H2 headers in README.md (no emojis) for clean Table of Contents anchors, following Maintenance V5 rules.
+- **Skill Metadata**: Enhanced description validation and category consistency across 968 skills.
+
+## 👥 Credits
+
+A huge shoutout to our community contributors:
+
+- **@ar27111994** for the 12 Apify skills and registry hardening (PR #165, #168)
+- **@kriptoburak** for `x-twitter-scraper` (PR #164)
+- **@shmlkv** for `dna-claude-analysis` (PR #167)
+
+---
+
+## [6.6.0] - 2026-02-28 - "Community Skills & Quality"
+
+> **New skills for Android UI verification, memory handling, video manipulation, vibe-code auditing, and essential fixes.**
+
+This release integrates major community contributions, adding skills for Android testing, scoped agent memory, vibe-code quality auditing, and the VideoDB SDK. It also addresses issues with skill metadata validation and enhances documentation consistency.
+
+## 🚀 New Skills
+
+### 📱 [android_ui_verification](skills/android_ui_verification/)
+
+**Automated end-to-end UI testing on Android Emulators.**
+Test layout issues, check state verification, and capture screenshots right from ADB.
+
+### 🧠 [hierarchical-agent-memory](skills/hierarchical-agent-memory/)
+
+**Scoped CLAUDE.md memory system.**
+Directory-level context files with a dashboard, significantly reducing token spend on repetitive queries.
+
+### 🎥 [videodb-skills](skills/videodb-skills/)
+
+**The ultimate Video processing toolkit.**
+Upload, stream, search, edit, transcribe, and generate AI video/audio using the VideoDB SDK.
+
+### 🕵️ [vibe-code-auditor](skills/vibe-code-auditor/)
+
+**AI-code specific quality assessments.**
+Check prototypes and generated code for structural flaws, hidden technical debt, and production risks.
+
+---
+
+## 📦 Improvements
+
+- **Skill Description Restoration**: Recovered 223+ truncated descriptions from git history that were corrupted in release 6.5.0.
+- **Robust YAML Tooling**: Replaced fragile regex parsing with `PyYAML` across all maintenance scripts (`manage_skill_dates.py`, `validate_skills.py`, etc.) to prevent future data loss.
+- **Refined Descriptions**: Standardized all skill descriptions to be under 200 characters while maintaining grammatical correctness and functional value.
+- **Cross-Platform Index**: Normalized `skills_index.json` to use forward slashes for universal path compatibility.
+- **Skill Validation Fixes**: Corrected invalid description lengths and `risk` fields in `copywriting`, `videodb-skills`, and `vibe-code-auditor`. (Fixes #157, #158)
+- **Documentation**: New dedicated `docs/SEC_SKILLS.md` indexing all 128 security skills.
+- **README Quality**: Cleaned up inconsistencies, deduplicated lists, updated stats (954+ total skills).
+
+## 👥 Credits
+
+A huge shoutout to our community contributors:
+
+- **@alexmvie** for `android_ui_verification`
+- **@talesperito** for `vibe-code-auditor`
+- **@djmahe4** for `docs/SEC_SKILLS.md`
+- **@kromahlusenii-ops** for `hierarchical-agent-memory`
+- **@0xrohitgarg** for `videodb-skills`
+- **@nedcodes-ok** for `rule-porter` addition
+- **@acbhatt12** for `README.md` improvements (PR #162)
+
+---
+
+## [6.5.0] - 2026-02-27 - "Community & Experience"
+
+> **Major UX upgrade: Stars feature, auto-updates, interactive prompts, and complete date tracking for all 950+ skills.**
+
+This release introduces significant community-driven enhancements to the web application alongside comprehensive metadata improvements. Users can now upvote skills, build contextual prompts interactively, and benefit from automatic skill updates. All skills now include date tracking for better discoverability.
+
+## 🚀 New Features
+
+### ⭐ Stars & Community Upvotes
+
+**Community-driven skill discovery with star/upvote system.**
+
+- Upvote skills you find valuable — visible to all users
+- Star counts persist via Supabase backend
+- One upvote per browser (localStorage deduplication)
+- Discover popular skills through community ratings
+
+> **Try it:** Browse to any skill and click the ⭐ button to upvote!
+
+### 🔄 Auto-Update Mechanism
+
+**Seamless skill updates via START_APP.bat.**
+
+- Automatic skill synchronization on app startup
+- Git-based fast updates when available
+- PowerShell HTTPS fallback for non-Git environments
+- Surgical updates — only `/skills/` folder to avoid conflicts
+
+> **Try it:** Run `START_APP.bat` to automatically fetch the latest 950+ skills!
+
+### 🛠️ Interactive Prompt Builder
+
+**Build contextual prompts directly in skill detail pages.**
+
+- Add custom context to any skill (e.g., "Use React 19 and Tailwind")
+- Copy formatted prompt with skill invocation + your context
+- Copy full skill content with context overlay
+- Streamlined workflow for AI assistant interactions
+
+> **Try it:** Visit any skill, add context in the text box, click "Copy @Skill"!
+
+### 📅 Date Tracking for All Skills
+
+**Complete `date_added` metadata across the entire registry.**
+
+- All 950+ skills now include `date_added` field
+- Visible badges in skill detail pages
+- Filter and sort by recency
+- Better discoverability of new capabilities
+
+## 📦 Improvements
+
+- **Smart Auto-Categorization**: Categories sorted by skill count with "uncategorized" at the end
+- **Category Stats**: Dropdown shows skill count per category
+- **Enhanced Home Page**: Risk level badges and date display on skill cards
+- **Complete Date Coverage**: All skills updated with `date_added` metadata
+- **Web App Dependencies**: Automatic `@supabase/supabase-js` installation
+
+## 👥 Credits
+
+A huge shoutout to our community contributors:
+
+- **@zinzied** for the comprehensive UX enhancement (Stars, Auto-Update, Prompt Builder, Date Tracking, Auto-Categorization — PR #150)
+
+---
+
+## [6.4.1] - 2026-02-27 - "Temporal & Convex Backend Hotfix"
+
+> **Hotfix release: Temporal Go expert skill, Convex reactive backend, and strict-compliant SEO incident/local audit fixes.**
+
+This release builds on 6.4.0 by adding a Temporal Go SDK pro skill, a comprehensive Convex reactive backend skill, and aligning the new SEO incident/local audit skills with the strict validation rules so they ship cleanly via npm.
+
+## 🚀 New Skills
+
+### ⏱️ [temporal-golang-pro](skills/temporal-golang-pro/)
+
+**Temporal Go SDK expert for durable distributed systems.**
+Guides production-grade Temporal Go usage with deterministic workflow rules, mTLS worker configuration, interceptors, testing strategies, and advanced patterns.
+
+- **Key Feature 1**: Covers workflow determinism, versioning, durable concurrency and long-running workflow patterns.
+- **Key Feature 2**: Provides mTLS-secure worker setup, interceptors, and replay/time-skipping test strategies.
+
+> **Try it:** `Use temporal-golang-pro to design a durable subscription billing workflow with safe versioning and mTLS workers.`
+
+### 🔄 [convex](skills/convex/)
+
+**Convex reactive backend for schema, functions, and real-time apps.**
+Full-stack backend skill covering Convex schema design, TypeScript query/mutation/action functions, real-time subscriptions, auth, file storage, scheduling, and deployment flows.
+
+- **Key Feature 1**: End-to-end examples for schema validators, function types, pagination and client integration.
+- **Key Feature 2**: Documents auth options (Convex Auth, Clerk, Better Auth) and operational patterns (cron, storage, environments).
+
+> **Try it:** `Use convex to design a schema and function set for a real-time dashboard with authenticated users and file uploads.`
+
+## 📦 Improvements
+
+- **Strict SEO Skills Compliance**:
+  - `seo-forensic-incident-response` and `local-legal-seo-audit` now include `## When to Use` sections and concise descriptions, and use `risk: safe`, fully passing `validate_skills.py --strict`.
+- **Catalog & Index Sync**:
+  - Updated `CATALOG.md`, `data/catalog.json`, `skills_index.json`, `data/bundles.json`, `data/aliases.json`, and `README.md` to track **950+ skills**, including `temporal-golang-pro`, `convex`, and the new SEO skills.
+
+## 👥 Credits
+
+- **@HuynhNhatKhanh** for the Temporal Go SDK expert skill (`temporal-golang-pro`, PR #148).
+- **@chauey** for the Convex reactive backend skill (`convex`, PR #152).
+- **@talesperito** for the SEO forensic incident response and local legal SEO skills and collaboration on the strict-compliant refinements (PRs #153 / #154).
+
+---
+
+## [6.4.0] - 2026-02-27 - "SEO Incident Response & Legal Local Audit"
+
+> **Focused release: specialized SEO incident response and legal local SEO audit skills, plus catalog sync.**
+
+This release adds two advanced SEO skills for handling organic traffic incidents and auditing legal/professional services sites, and updates the public catalog to keep discovery aligned with the registry.
+
+## 🚀 New Skills
+
+### 🧪 [seo-forensic-incident-response](skills/seo-forensic-incident-response/)
+
+**Forensic SEO incident response for sudden organic traffic or rankings drops.**
+Guides structured triage, hypothesis-driven investigation, evidence collection and phased recovery plans using GSC, analytics, logs and deployment history.
+
+- **Key Feature 1**: Classifies incidents across algorithmic, technical, manual action, content and demand-change buckets.
+- **Key Feature 2**: Produces a forensic report with 0–3 day, 3–14 day and 2–8 week action plans plus monitoring.
+
+> **Try it:** `We lost 40% of organic traffic last week. Use seo-forensic-incident-response to investigate and propose a recovery plan.`
+
+### ⚖️ [local-legal-seo-audit](skills/local-legal-seo-audit/)
+
+**Local SEO auditing for law firms and legal/professional services.**
+Specialized audit framework for YMYL legal sites covering GBP, E‑E‑A‑T, practice area pages, NAP consistency, legal directories and reputation.
+
+- **Key Feature 1**: Step‑by‑step GBP, directory and NAP audit tailored to legal practices.
+- **Key Feature 2**: Generates a prioritized action plan and content strategy for legal/local search.
+
+> **Try it:** `Audit the local SEO of this law firm website using local-legal-seo-audit and propose the top 10 fixes.`
+
+## 📦 Improvements
+
+- **Catalog Sync**: Updated `CATALOG.md` and `data/catalog.json` to track 947 skills and include `10-andruia-skill-smith` in the general category listing.
+- **Documentation**: README now references the MojoAuth implementation skill in the integrations list.
+
+## 👥 Credits
+
+A huge shoutout to our community contributors:
+
+- **@talesperito** for the SEO forensic incident response and legal local SEO audit skills (PRs #153 / #154).
+- **@developer-victor** for the MojoAuth implementation README integration (PR #149).
+
+---
+
 ## [6.3.1] - 2026-02-25 - "Validation & Multi-Protocol Hotfix"
 
 > **"Hotfix release to restore missing skills, correct industrial risk labels, and harden validation across the registry."**

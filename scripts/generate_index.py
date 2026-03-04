@@ -1,8 +1,15 @@
 import os
 import json
 import re
+import sys
 
 import yaml
+
+# Ensure UTF-8 output for Windows compatibility
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 def parse_frontmatter(content):
     """
@@ -52,14 +59,17 @@ def generate_index(skills_dir, output_file):
             parent_dir = os.path.basename(os.path.dirname(root))
             
             # Default values
+            rel_path = os.path.relpath(root, os.path.dirname(skills_dir))
+            # Force forward slashes for cross-platform JSON compatibility
             skill_info = {
                 "id": dir_name,
-                "path": os.path.relpath(root, os.path.dirname(skills_dir)),
-                "category": parent_dir if parent_dir != "skills" else "uncategorized",
+                "path": rel_path.replace(os.sep, '/'),
+                "category": parent_dir if parent_dir != "skills" else None,  # Will be overridden by frontmatter if present
                 "name": dir_name.replace("-", " ").title(),
                 "description": "",
                 "risk": "unknown",
-                "source": "unknown"
+                "source": "unknown",
+                "date_added": None
             }
             
             try:
@@ -72,11 +82,18 @@ def generate_index(skills_dir, output_file):
             # Parse Metadata
             metadata = parse_frontmatter(content)
             
-            # Merge Metadata
+            # Merge Metadata (frontmatter takes priority)
             if "name" in metadata: skill_info["name"] = metadata["name"]
             if "description" in metadata: skill_info["description"] = metadata["description"]
             if "risk" in metadata: skill_info["risk"] = metadata["risk"]
             if "source" in metadata: skill_info["source"] = metadata["source"]
+            if "date_added" in metadata: skill_info["date_added"] = metadata["date_added"]
+            
+            # Category: prefer frontmatter, then folder structure, then default
+            if "category" in metadata:
+                skill_info["category"] = metadata["category"]
+            elif skill_info["category"] is None:
+                skill_info["category"] = "uncategorized"
             
             # Fallback for description if missing in frontmatter (legacy support)
             if not skill_info["description"]:
@@ -102,7 +119,7 @@ def generate_index(skills_dir, output_file):
     # Sort validation: by name
     skills.sort(key=lambda x: (x["name"].lower(), x["id"].lower()))
 
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(skills, f, indent=2)
     
     print(f"✅ Generated rich index with {len(skills)} skills at: {output_file}")

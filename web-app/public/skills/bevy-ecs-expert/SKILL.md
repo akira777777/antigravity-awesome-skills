@@ -1,8 +1,9 @@
 ---
 name: bevy-ecs-expert
-description: Master Bevy's Entity Component System (ECS) in Rust, covering Systems, Queries, Resources, and parallel scheduling.
+description: "Master Bevy's Entity Component System (ECS) in Rust, covering Systems, Queries, Resources, and parallel scheduling."
 risk: safe
 source: community
+date_added: "2026-02-27"
 ---
 
 # Bevy ECS Expert
@@ -83,25 +84,27 @@ fn main() {
 
 ## Examples
 
-### Example 1: Spawning Entities with Bundles
+### Example 1: Spawning Entities with Require Component
 
 ```rust
-#[derive(Bundle)]
-struct PlayerBundle {
-    player: Player,
-    velocity: Velocity,
-    sprite: SpriteBundle,
+use bevy::prelude::*;
+
+#[derive(Component, Reflect, Default)]
+#[require(Velocity, Sprite)]
+struct Player;
+
+#[derive(Component, Default)]
+struct Velocity {
+    x: f32,
+    y: f32,
 }
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(PlayerBundle {
-        player: Player,
-        velocity: Velocity { x: 10.0, y: 0.0 },
-        sprite: SpriteBundle {
-            texture: asset_server.load("player.png"),
-            ..default()
-        },
-    });
+    commands.spawn((
+        Player,
+        Velocity { x: 10.0, y: 0.0 },
+        Sprite::from_image(asset_server.load("player.png")), 
+    ));
 }
 ```
 
