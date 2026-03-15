@@ -2,7 +2,7 @@
 
 Generated at: 2026-02-08T00:00:00.000Z
 
-Total skills: 1246
+Total skills: 1245
 
 ## architecture (80)
 
@@ -862,7 +862,7 @@ matrix-sdk, matrix client, robrix, mat... | robius, matrix, integration | robius
 | `shodan-reconnaissance` | This skill should be used when the user asks to "search for exposed devices on the internet," "perform Shodan reconnaissance," "find vulnerable services usin... | shodan, reconnaissance | shodan, reconnaissance, skill, should, used, user, asks, search, exposed, devices, internet, perform |
 | `signup-flow-cro` | When the user wants to optimize signup, registration, account creation, or trial activation flows. Also use when the user mentions "signup conversions," "reg... | signup, flow, cro | signup, flow, cro, user, wants, optimize, registration, account, creation, trial, activation, flows |
 | `skill-check` | Validate Claude Code skills against the agentskills specification. Catches structural, semantic, and naming issues before users do. | validation, linter, agentskills, skill-authoring, code-quality | validation, linter, agentskills, skill-authoring, code-quality, skill, check, validate, claude, code, skills, against |
-| `skill-creator` | This skill should be used when the user asks to create a new skill, build a skill, make a custom skill, develop a CLI skill, or wants to extend the CLI with ... | [automation, scaffolding, skill-creation, meta-skill] | [automation, scaffolding, skill-creation, meta-skill], skill, creator, should, used, user, asks, new, custom |
+| `skill-creator` | Create or update skills in this repository using the local scaffold and validator. Use when adding a new skill, fixing SKILL.md frontmatter, reorganizing bun... | skill, creator | skill, creator, update, skills, repository, local, scaffold, validator, adding, new, fixing, md |
 | `skill-improver` | Iteratively reviews and fixes Claude Code skill quality issues until they meet standards. Runs automated fix-review cycles using the skill-reviewer agent. Us... | skill, improver | skill, improver, iteratively, reviews, fixes, claude, code, quality, issues, until, meet, standards |
 | `skill-rails-upgrade` | Analyze Rails apps and provide upgrade assessments | skill, rails, upgrade | skill, rails, upgrade, analyze, apps, provide, assessments |
 | `skill-router` | Use when the user is unsure which skill to use or where to start. Interviews the user with targeted questions and recommends the best skill(s) from the insta... | skill, router | skill, router, user, unsure, which, where, start, interviews, targeted, questions, recommends, installed |
@@ -1213,7 +1213,7 @@ PROACTIVELY for YMY... | seo, authority, builder | seo, authority, builder, anal
 | `wordpress-plugin-development` | WordPress plugin development workflow covering plugin architecture, hooks, admin interfaces, REST API, and security best practices. | wordpress, plugin | wordpress, plugin, development, covering, architecture, hooks, admin, interfaces, rest, api, security |
 | `zeroize-audit` | Detects missing zeroization of sensitive data in source code and identifies zeroization removed by compiler optimizations, with assembly-level analysis, and ... | zeroize, audit | zeroize, audit, detects, missing, zeroization, sensitive, data, source, code, identifies, removed, compiler |
 
-## testing (35)
+## testing (34)
 
 | Skill | Description | Tags | Triggers |
 | --- | --- | --- | --- |
@@ -1229,7 +1229,6 @@ behavior. Use proactively when encountering any issues. | debugger | debugger, d
 | `html-injection-testing` | This skill should be used when the user asks to "test for HTML injection", "inject HTML into web pages", "perform HTML injection attacks", "deface web applic... | html, injection | html, injection, testing, skill, should, used, user, asks, test, inject, web, pages |
 | `idor-testing` | This skill should be used when the user asks to "test for insecure direct object references," "find IDOR vulnerabilities," "exploit broken access control," "... | idor | idor, testing, skill, should, used, user, asks, test, insecure, direct, object, references |
 | `leiloeiro-risco` | Analise de risco em leiloes de imoveis. Score 36 pontos, riscos juridicos/financeiros/operacionais, stress test 4 cenarios e ROI ponderado por risco. | risk-analysis, scoring, stress-test, brazilian | risk-analysis, scoring, stress-test, brazilian, leiloeiro, risco, analise, de, em, leiloes, imoveis, score |
-| `metasploit-framework` | This skill should be used when the user asks to "use Metasploit for penetration testing", "exploit vulnerabilities with msfconsole", "create payloads with ms... | metasploit, framework | metasploit, framework, skill, should, used, user, asks, penetration, testing, exploit, vulnerabilities, msfconsole |
 | `performance-testing-review-multi-agent-review` | Use when working with performance testing review multi agent review | performance, multi, agent | performance, multi, agent, testing, review, working |
 | `playwright-skill` | Complete browser automation with Playwright. Auto-detects dev servers, writes clean test scripts to /tmp. Test pages, fill forms, take screenshots, check res... | playwright, skill | playwright, skill, complete, browser, automation, auto, detects, dev, servers, writes, clean, test |
 | `pypict-skill` | Pairwise test generation | pypict, skill | pypict, skill, pairwise, test, generation |

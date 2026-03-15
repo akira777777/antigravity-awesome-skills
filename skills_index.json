@@ -7610,16 +7610,6 @@
     "date_added": "2026-02-27"
   },
   {
-    "id": "metasploit-framework",
-    "path": "skills/metasploit-framework",
-    "category": "uncategorized",
-    "name": "metasploit-framework",
-    "description": "This skill should be used when the user asks to \"use Metasploit for penetration testing\", \"exploit vulnerabilities with msfconsole\", \"create payloads with msfvenom\", \"perform post-exp...",
-    "risk": "unknown",
-    "source": "community",
-    "date_added": "2026-02-27"
-  },
-  {
     "id": "micro-saas-launcher",
     "path": "skills/micro-saas-launcher",
     "category": "uncategorized",
@@ -10354,7 +10344,7 @@
     "path": "skills/skill-creator",
     "category": "meta",
     "name": "skill-creator",
-    "description": "This skill should be used when the user asks to create a new skill, build a skill, make a custom skill, develop a CLI skill, or wants to extend the CLI with new capabilities. Automates the entire s...",
+    "description": "Create or update skills in this repository using the local scaffold and validator. Use when adding a new skill, fixing SKILL.md frontmatter, reorganizing bundled resources, or improving skill authoring docs.",
     "risk": "safe",
     "source": "community",
     "date_added": "2026-02-27"
