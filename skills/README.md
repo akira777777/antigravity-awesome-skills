@@ -142,13 +142,18 @@ See the [main README](../README.md) for the complete list of all 179+ skills org
 Want to create a new skill? Check out:
 1. [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute
 2. [docs/contributors/skill-anatomy.md](../docs/contributors/skill-anatomy.md) - Skill structure guide
-3. `@skill-creator` - Use this skill to create new skills!
+3. [`skills/skill-creator/scripts/init_skill.py`](skill-creator/scripts/init_skill.py) - Scaffold a new skill folder
+4. `@skill-creator` - Use this skill to create or update skills safely
 
 **Basic structure:**
 ```markdown
 ---
 name: my-skill-name
 description: "What this skill does"
+category: general
+risk: safe
+source: community
+date_added: "YYYY-MM-DD"
 ---
 
 # Skill Title
@@ -162,9 +167,15 @@ description: "What this skill does"
 ## Instructions
 [Step-by-step guide]
 
-## Examples
-[Code examples]
+## Resources
+- `scripts/` for deterministic helpers
+- `references/` for detailed docs
+- `assets/` for reusable files
 ```
+
+For curated skill combinations and execution playbooks, prefer:
+- [docs/users/bundles.md](../docs/users/bundles.md)
+- [docs/users/workflows.md](../docs/users/workflows.md)
 
 ---
 

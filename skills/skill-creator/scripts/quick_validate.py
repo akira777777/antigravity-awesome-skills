@@ -1,95 +1,165 @@
 #!/usr/bin/env python3
 """
-Quick validation script for skills - minimal version
+Quick validation for repository skills.
+
+This script stays dependency-light so contributors can run it in a clean Python
+environment without installing PyYAML first.
 """
 
-import sys
-import os
+from __future__ import annotations
+
+import ast
 import re
-import yaml
+import sys
 from pathlib import Path
 
-def validate_skill(skill_path):
-    """Basic validation of a skill"""
-    skill_path = Path(skill_path)
+try:
+    import yaml  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    yaml = None
 
-    # Check SKILL.md exists
-    skill_md = skill_path / 'SKILL.md'
-    if not skill_md.exists():
-        return False, "SKILL.md not found"
 
-    # Read and validate frontmatter
-    content = skill_md.read_text()
-    if not content.startswith('---'):
-        return False, "No YAML frontmatter found"
+SKILL_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+KNOWN_KEYS = {
+    "name",
+    "description",
+    "category",
+    "risk",
+    "source",
+    "date_added",
+    "author",
+    "tags",
+    "tools",
+    "version",
+    "license",
+    "allowed-tools",
+    "metadata",
+}
 
-    # Extract frontmatter
-    match = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
+
+def extract_frontmatter(content: str) -> tuple[dict, str]:
+    if not content.startswith("---"):
+        raise ValueError("No YAML frontmatter found.")
+
+    match = re.match(r"^---\n(.*?)\n---\n?(.*)$", content, re.DOTALL)
     if not match:
-        return False, "Invalid frontmatter format"
+        raise ValueError("Invalid frontmatter format.")
 
-    frontmatter_text = match.group(1)
+    raw_frontmatter = match.group(1)
+    body = match.group(2)
+    return parse_frontmatter(raw_frontmatter), body
 
-    # Parse YAML frontmatter
+
+def parse_frontmatter(raw_frontmatter: str) -> dict:
+    if yaml is not None:
+        parsed = yaml.safe_load(raw_frontmatter)
+        if not isinstance(parsed, dict):
+            raise ValueError("Frontmatter must decode to a mapping.")
+        return parsed
+
+    parsed: dict[str, object] = {}
+    for raw_line in raw_frontmatter.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if ":" not in line:
+            raise ValueError(
+                "PyYAML is not installed and a frontmatter line could not be parsed: "
+                f"{raw_line!r}"
+            )
+
+        key, raw_value = line.split(":", 1)
+        key = key.strip()
+        value = raw_value.strip()
+
+        if not value:
+            parsed[key] = ""
+            continue
+
+        if value[0] == value[-1] and value[0] in {"'", '"'}:
+            parsed[key] = value[1:-1]
+        elif value.startswith("[") and value.endswith("]"):
+            try:
+                parsed[key] = ast.literal_eval(value)
+            except (SyntaxError, ValueError):
+                items = [item.strip().strip("'\"") for item in value[1:-1].split(",")]
+                parsed[key] = [item for item in items if item]
+        else:
+            parsed[key] = value
+
+    return parsed
+
+
+def validate_skill(skill_path: str | Path) -> tuple[bool, str]:
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    skill_dir = Path(skill_path)
+    skill_md = skill_dir / "SKILL.md"
+
+    if not skill_md.exists():
+        return False, "SKILL.md not found."
+
     try:
-        frontmatter = yaml.safe_load(frontmatter_text)
-        if not isinstance(frontmatter, dict):
-            return False, "Frontmatter must be a YAML dictionary"
-    except yaml.YAMLError as e:
-        return False, f"Invalid YAML in frontmatter: {e}"
+        content = skill_md.read_text(encoding="utf-8")
+    except OSError as exc:
+        return False, f"Unable to read SKILL.md: {exc}"
 
-    # Define allowed properties
-    ALLOWED_PROPERTIES = {'name', 'description', 'license', 'allowed-tools', 'metadata'}
+    try:
+        frontmatter, body = extract_frontmatter(content)
+    except ValueError as exc:
+        return False, str(exc)
 
-    # Check for unexpected properties (excluding nested keys under metadata)
-    unexpected_keys = set(frontmatter.keys()) - ALLOWED_PROPERTIES
-    if unexpected_keys:
-        return False, (
-            f"Unexpected key(s) in SKILL.md frontmatter: {', '.join(sorted(unexpected_keys))}. "
-            f"Allowed properties are: {', '.join(sorted(ALLOWED_PROPERTIES))}"
-        )
+    name = frontmatter.get("name")
+    description = frontmatter.get("description")
 
-    # Check required fields
-    if 'name' not in frontmatter:
-        return False, "Missing 'name' in frontmatter"
-    if 'description' not in frontmatter:
-        return False, "Missing 'description' in frontmatter"
+    if not isinstance(name, str) or not name.strip():
+        errors.append("Missing or invalid 'name' in frontmatter.")
+    else:
+        normalized_name = name.strip()
+        if not SKILL_NAME_PATTERN.fullmatch(normalized_name):
+            errors.append(
+                "Name must use lowercase letters, digits, and single hyphens only."
+            )
+        if normalized_name != skill_dir.name:
+            errors.append(
+                f"Frontmatter name '{normalized_name}' does not match directory '{skill_dir.name}'."
+            )
+        if len(normalized_name) > 64:
+            errors.append("Name must be 64 characters or fewer.")
 
-    # Extract name for validation
-    name = frontmatter.get('name', '')
-    if not isinstance(name, str):
-        return False, f"Name must be a string, got {type(name).__name__}"
-    name = name.strip()
-    if name:
-        # Check naming convention (hyphen-case: lowercase with hyphens)
-        if not re.match(r'^[a-z0-9-]+$', name):
-            return False, f"Name '{name}' should be hyphen-case (lowercase letters, digits, and hyphens only)"
-        if name.startswith('-') or name.endswith('-') or '--' in name:
-            return False, f"Name '{name}' cannot start/end with hyphen or contain consecutive hyphens"
-        # Check name length (max 64 characters per spec)
-        if len(name) > 64:
-            return False, f"Name is too long ({len(name)} characters). Maximum is 64 characters."
+    if not isinstance(description, str) or not description.strip():
+        errors.append("Missing or invalid 'description' in frontmatter.")
+    else:
+        normalized_description = description.strip()
+        if "<" in normalized_description or ">" in normalized_description:
+            errors.append("Description cannot contain angle brackets.")
+        if len(normalized_description) > 1024:
+            errors.append("Description must be 1024 characters or fewer.")
 
-    # Extract and validate description
-    description = frontmatter.get('description', '')
-    if not isinstance(description, str):
-        return False, f"Description must be a string, got {type(description).__name__}"
-    description = description.strip()
-    if description:
-        # Check for angle brackets
-        if '<' in description or '>' in description:
-            return False, "Description cannot contain angle brackets (< or >)"
-        # Check description length (max 1024 characters per spec)
-        if len(description) > 1024:
-            return False, f"Description is too long ({len(description)} characters). Maximum is 1024 characters."
+    if not body.strip():
+        errors.append("SKILL.md body is empty.")
 
-    return True, "Skill is valid!"
+    unknown_keys = sorted(set(frontmatter.keys()) - KNOWN_KEYS)
+    if unknown_keys:
+        warnings.append("Unknown frontmatter keys: " + ", ".join(unknown_keys))
 
-if __name__ == "__main__":
+    messages = errors + warnings
+    if messages:
+        return (not errors), " ".join(messages)
+
+    return True, "Skill is valid."
+
+
+def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: python quick_validate.py <skill_directory>")
-        sys.exit(1)
-    
-    valid, message = validate_skill(sys.argv[1])
+        return 1
+
+    is_valid, message = validate_skill(sys.argv[1])
     print(message)
-    sys.exit(0 if valid else 1)
+    return 0 if is_valid else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
